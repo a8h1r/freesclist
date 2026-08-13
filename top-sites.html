@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top Sites — FreeSCList</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:            #0A0A0B;
+  --bg-panel:      #111214;
+  --bg-panel-2:    #0D0D0E;
+  --ink:           #F7F5F1;
+  --ink-soft:      #C7C4BC;
+  --ink-faint:     #85827B;
+  --gold:          #CDA23D;
+  --gold-soft:     #E4C878;
+  --border:        rgba(255,255,255,0.10);
+  --border-strong: rgba(255,255,255,0.20);
+  --font-display: 'Baloo 2', 'Fredoka', sans-serif;
+  --font-body:    'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --container: 1180px;
+}
+*, *::before, *::after{ box-sizing: border-box; }
+body{ margin: 0; background: var(--bg); color: var(--ink-soft); font-family: var(--font-body); line-height: 1.7; }
+a{ color: inherit; text-decoration: none; }
+button{ cursor: pointer; font-family: inherit; }
+.container{ width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: 32px; }
+
+/* Header */
+.site-header{ background: var(--bg); border-bottom: 1px solid var(--border); }
+.nav{ display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand{ display: flex; align-items: center; gap: 10px; background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 6px 16px 6px 8px; }
+.brand-mark{ width: 40px; height: 40px; flex: none; }
+.brand-word{ font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--ink); }
+.brand-word .sc{ color: var(--gold); }
+.nav-links{ display: flex; align-items: center; gap: 8px; }
+.nav-links a{ padding: 10px 18px; font-size: 0.92rem; font-weight: 700; text-transform: uppercase; color: var(--ink-soft); transition: color 0.15s ease; border-bottom: 2px solid transparent; }
+.nav-links a:hover, .nav-links a.is-active{ color: var(--ink); border-color: var(--ink); }
+
+/* Main */
+.hero{ padding-block: 80px 40px; text-align: center; }
+.hero h1{ font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 6.4vw, 3.6rem); color: var(--ink); margin: 0 0 16px; }
+.hero p{ color: var(--ink-soft); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+.casino-guide-list{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-block: 40px; }
+.casino-card{ background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 32px 28px; display: flex; flex-direction: column; }
+.casino-card h3{ font-family: var(--font-display); font-weight: 800; font-size: 1.65rem; color: var(--gold); margin: 0 0 16px; }
+.casino-card h3 a{ color: var(--gold); text-decoration: none; transition: color 0.15s ease, text-decoration 0.15s ease; }
+.casino-card h3 a:hover{ color: var(--gold-soft); text-decoration: underline; }
+.casino-card p{ color: var(--ink-soft); font-size: 1.05rem; margin: 0 0 16px; line-height: 1.65; white-space: pre-line; }
+.casino-card p:last-child{ margin-bottom: 0; }
+@media (max-width: 960px){
+  .casino-guide-list{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px){
+  .casino-guide-list{ grid-template-columns: 1fr; }
+}
+
+/* Footer */
+.site-footer{ background: #000; border-top: 1px solid var(--border); margin-top: 80px; }
+.footer-inner{ padding-block: 50px 34px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.footer-brand{ display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--ink); }
+.footer-brand .sc{ color: var(--gold); }
+.footer-links{ display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; }
+.footer-links a{ color: var(--ink-soft); font-size: 0.88rem; font-weight: 700; text-transform: uppercase; }
+.footer-fine{ font-size: 0.82rem; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40"><rect x="6" y="16" width="28" height="18" rx="2" fill="#1F6B5C"/><rect x="6" y="16" width="28" height="6" fill="#164F44"/><rect x="17.5" y="16" width="5" height="18" fill="#164F44"/><path d="M20 16c-3-6-10-6-8-1 1 2.5 5 1.5 8 1z" fill="#CDA23D"/><path d="M20 16c3-6 10-6 8-1-1 2.5-5 1.5-8 1z" fill="#CDA23D"/></svg>
+      <span class="brand-word">Free<span class="sc">SC</span>List</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="casinos.html">Dailys</a>
+      <a href="my-list.html">My Casinos</a>
+      <a href="top-sites.html" class="is-active">Top Sites</a>
+      <a href="about-us.html">About Us</a>
+      <a href="full-guide.html">Full Guide</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div style="text-align: center;">
+      <span id="dateBadgeMount" style="display: inline-block; padding: 6px 14px; background: rgba(205,162,61,0.15); border: 1px solid var(--gold); color: var(--gold-soft); border-radius: 99px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">
+        📅 Last Updated: August 2026
+      </span>
+      <h1>Top Sweepstakes Casinos</h1>
+      <p>Our recommended platforms to start collecting daily free SC rewards. Verified links with daily bonuses.</p>
+    </div>
+  </section>
+
+  <div class="casino-guide-list" id="top-sites-mount">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <svg width="26" height="26" viewBox="0 0 40 40"><rect x="6" y="16" width="28" height="18" rx="2" fill="#1F6B5C"/><rect x="6" y="16" width="28" height="6" fill="#164F44"/><rect x="17.5" y="16" width="5" height="18" fill="#164F44"/><path d="M20 16c-3-6-10-6-8-1 1 2.5 5 1.5 8 1z" fill="#CDA23D"/><path d="M20 16c3-6 10-6 8-1-1 2.5-5 1.5-8 1z" fill="#CDA23D"/></svg>
+      Free<span class="sc">SC</span>List
+    </div>
+    <nav class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="casinos.html">Dailys</a>
+      <a href="my-list.html">My Casinos</a>
+      <a href="top-sites.html">Top Sites</a>
+      <a href="about-us.html">About Us</a>
+      <a href="full-guide.html">Full Guide</a>
+    </nav>
+    <p class="footer-fine">© 2026 FreeSCList. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Fetch Date Badge
+        fetch('/api/settings/top-sites-date').then(r => r.json()).then(d => {
+            if (d.value) {
+                document.getElementById('dateBadgeMount').textContent = '📅 Last Updated: ' + d.value;
+            }
+        });
+
+        const response = await fetch('/api/casinos');
+        const casinos = await response.json();
+        
+        const mount = document.getElementById('top-sites-mount');
+        const topCasinos = casinos.filter(c => c.show_on_top_sites === 1);
+        
+        if (topCasinos.length === 0) {
+            mount.innerHTML = '<p>No top sites currently available. Check back soon!</p>';
+            return;
+        }
+
+        topCasinos.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'casino-card';
+            
+            card.innerHTML = `
+                <h3><a href="${c.referral_url || '#'}" target="_blank" rel="noopener noreferrer">${c.name}</a></h3>
+                <p>${c.description || ''}</p>
+            `;
+            mount.appendChild(card);
+        });
+    } catch (e) {
+        console.error('Failed to load top sites:', e);
+    }
+});
+</script>
+</body>
+</html>

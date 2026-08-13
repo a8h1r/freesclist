@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Board — FreeSCList</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:            #0A0A0B;
+  --bg-panel:      #111214;
+  --ink:           #F7F5F1;
+  --ink-soft:      #C7C4BC;
+  --gold:          #CDA23D;
+  --border:        rgba(255,255,255,0.10);
+  --font-display: 'Baloo 2', 'Fredoka', sans-serif;
+  --font-body:    'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*, *::before, *::after{ box-sizing: border-box; }
+body{ margin: 0; background: var(--bg); color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; }
+.container{ max-width: 900px; margin: 40px auto; padding: 0 20px; }
+h1, h2{ font-family: var(--font-display); color: var(--gold); }
+
+.card{ background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+.form-group{ margin-bottom: 16px; }
+label{ display: block; margin-bottom: 6px; font-weight: 700; color: var(--ink); }
+input, select{ width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: var(--ink); border-radius: 6px; font-family: inherit; }
+.btn{ padding: 10px 20px; background: var(--gold); color: #000; border: none; font-weight: 700; border-radius: 6px; cursor: pointer; text-transform: uppercase; }
+.btn:hover{ opacity: 0.9; }
+.badge{ padding: 8px 12px; border-radius: 6px; font-weight: 700; display: none; margin-top: 10px; }
+.badge.success{ background: rgba(80,190,175,0.2); color: #50beaf; border: 1px solid #50beaf; display: inline-block; }
+.badge.error{ background: rgba(220,53,69,0.2); color: #dc3545; border: 1px solid #dc3545; display: inline-block; }
+
+table{ width: 100%; border-collapse: collapse; margin-top: 16px; }
+th, td{ text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+th{ color: var(--ink); }
+.btn-sm{ padding: 4px 10px; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<!-- Passcode Lock Screen Overlay -->
+<div id="lockScreen" style="position: fixed; inset: 0; background: #0A0A0B; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #111214; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 36px; max-width: 400px; width: 100%; text-align: center;">
+        <h2 style="font-family: var(--font-display); color: var(--gold); margin: 0 0 10px;">🔒 Admin Security</h2>
+        <p style="color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 24px;">Enter passcode to access the board.</p>
+        <form onsubmit="unlockAdmin(event)">
+            <input type="password" id="passcodeInput" placeholder="Enter Passcode" required style="width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); color: var(--ink); border-radius: 6px; margin-bottom: 16px; text-align: center; font-size: 1.1rem; letter-spacing: 0.1em;">
+            <button type="submit" class="btn" style="width: 100%;">Unlock Board</button>
+        </form>
+        <div id="lockError" style="color: #dc3545; font-weight: 700; margin-top: 14px; font-size: 0.9rem; display: none;">Invalid Passcode</div>
+    </div>
+</div>
+
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h1 style="margin:0;">Admin Board</h1>
+        <button onclick="lockAdmin()" class="btn btn-sm" style="background: rgba(255,255,255,0.1); color: var(--ink);">Lock 🔒</button>
+    </div>
+
+    <!-- Add Freebie -->
+    <div class="card">
+        <h2>Publish Freebie</h2>
+        <form id="freebieForm">
+            <div class="form-group">
+                <label>Select Casino</label>
+                <select id="casinoSelect" required></select>
+            </div>
+            <div class="form-group">
+                <label>Claim URL (UTM tags will be auto-stripped)</label>
+                <input type="url" id="claimUrl" placeholder="https://..." required>
+            </div>
+            <div class="form-group">
+                <label>Offer Title (Optional)</label>
+                <input type="text" id="offerTitle" placeholder="e.g. 1 SC Bonus">
+            </div>
+            <button type="submit" class="btn">Publish Freebie & Send Alerts</button>
+            <div id="freebieBadge" class="badge"></div>
+        </form>
+    </div>
+
+    <!-- Top Sites Date Setting -->
+    <div class="card">
+        <h2>Top Sites Badge Date Manager</h2>
+        <form id="dateForm">
+            <div class="form-group">
+                <label>Last Updated Badge Text</label>
+                <input type="text" id="topSitesDateInput" placeholder="e.g. August 2026" required>
+            </div>
+            <button type="submit" class="btn">Update Date Badge</button>
+            <div id="dateBadge" class="badge"></div>
+        </form>
+    </div>
+
+    <!-- Add Casino -->
+    <div class="card">
+        <h2>Casino Directory Manager</h2>
+        <form id="casinoForm">
+            <div class="form-group">
+                <label>Casino Name</label>
+                <input type="text" id="cName" required>
+            </div>
+            
+            <div class="form-group" style="display:flex; align-items:center; gap: 8px; margin-bottom: 20px;">
+                <input type="checkbox" id="cShowOnTop" style="width: 18px; height: 18px; accent-color: var(--gold);">
+                <label style="margin: 0; cursor: pointer;" for="cShowOnTop">Add to Top Sites page</label>
+            </div>
+
+            <div id="topSitesFields" style="display: none; padding-left: 20px; border-left: 2px solid var(--border); margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Referral / Affiliate URL (Optional)</label>
+                    <input type="url" id="cReferral" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Description (for Top Sites page)</label>
+                    <textarea id="cDescription" rows="4" style="width: 100%; padding: 10px; background: #000; border: 1px solid var(--border); color: var(--ink); border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Add Casino</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Referral URL</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="casinoTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function getAdminHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'x-admin-key': sessionStorage.getItem('admin_passcode') || ''
+    };
+}
+
+function lockAdmin() {
+    sessionStorage.removeItem('admin_passcode');
+    document.getElementById('lockScreen').style.display = 'flex';
+    document.getElementById('passcodeInput').value = '';
+}
+
+async function unlockAdmin(e) {
+    if (e) e.preventDefault();
+    const code = document.getElementById('passcodeInput').value;
+    sessionStorage.setItem('admin_passcode', code);
+    
+    // Verify passcode against API
+    const res = await fetch('/api/admin/casinos', { headers: getAdminHeaders() });
+    if (res.status === 401) {
+        document.getElementById('lockError').style.display = 'block';
+        sessionStorage.removeItem('admin_passcode');
+    } else {
+        document.getElementById('lockError').style.display = 'none';
+        document.getElementById('lockScreen').style.display = 'none';
+        loadCasinos();
+        loadDateSetting();
+    }
+}
+
+async function loadCasinos() {
+    const res = await fetch('/api/admin/casinos', { headers: getAdminHeaders() });
+    if (res.status === 401) return lockAdmin();
+    const casinos = await res.json();
+    
+    // Populate select
+    const select = document.getElementById('casinoSelect');
+    select.innerHTML = '<option value="">-- Choose --</option>';
+    
+    // Populate table
+    const tbody = document.getElementById('casinoTable');
+    tbody.innerHTML = '';
+
+    if (casinos.length === 0) {
+        document.querySelector('table').style.display = 'none';
+    } else {
+        document.querySelector('table').style.display = 'table';
+    }
+
+    casinos.forEach(c => {
+        if (c.is_active === 1) {
+            select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+        }
+        
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.name}</td>
+                <td>${c.referral_url ? 'Set' : 'None'}</td>
+                <td style="color:${c.is_active ? '#50beaf' : '#dc3545'}">${c.is_active ? 'Active' : 'Inactive'}</td>
+                <td>
+                    <button class="btn btn-sm" onclick="toggleCasino('${c.id}', ${c.is_active})">Toggle</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+document.getElementById('freebieForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.disabled = true;
+    
+    const body = {
+        casino_id: document.getElementById('casinoSelect').value,
+        claim_url: document.getElementById('claimUrl').value,
+        title: document.getElementById('offerTitle').value
+    };
+
+    const res = await fetch('/api/admin/freebies', {
+        method: 'POST',
+        headers: getAdminHeaders(),
+        body: JSON.stringify(body)
+    });
+    
+    const data = await res.json();
+    const badge = document.getElementById('freebieBadge');
+    
+    if (data.success) {
+        badge.className = 'badge success';
+        badge.textContent = 'Published! Clean URL: ' + data.claim_url;
+        e.target.reset();
+    } else {
+        badge.className = 'badge error';
+        badge.textContent = data.error || 'Failed to publish';
+    }
+    btn.disabled = false;
+});
+
+// Load Date Setting
+async function loadDateSetting() {
+    const res = await fetch('/api/settings/top-sites-date', { headers: getAdminHeaders() });
+    const data = await res.json();
+    document.getElementById('topSitesDateInput').value = data.value || 'August 2026';
+}
+
+document.getElementById('dateForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const val = document.getElementById('topSitesDateInput').value;
+    const res = await fetch('/api/admin/settings/top-sites-date', {
+        method: 'POST',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ value: val })
+    });
+    const data = await res.json();
+    const badge = document.getElementById('dateBadge');
+    if (data.success) {
+        badge.className = 'badge success';
+        badge.textContent = 'Updated to: ' + data.value;
+    } else {
+        badge.className = 'badge error';
+        badge.textContent = 'Failed to update';
+    }
+});
+
+document.getElementById('cShowOnTop').addEventListener('change', (e) => {
+    document.getElementById('topSitesFields').style.display = e.target.checked ? 'block' : 'none';
+});
+
+document.getElementById('casinoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const showOnTop = document.getElementById('cShowOnTop').checked;
+    const body = {
+        name: document.getElementById('cName').value,
+        description: showOnTop ? document.getElementById('cDescription').value : '',
+        show_on_top_sites: showOnTop,
+        referral_url: showOnTop ? document.getElementById('cReferral').value : ''
+    };
+    await fetch('/api/admin/casinos', {
+        method: 'POST',
+        headers: getAdminHeaders(),
+        body: JSON.stringify(body)
+    });
+    e.target.reset();
+    document.getElementById('topSitesFields').style.display = 'none'; // reset UI
+    loadCasinos();
+});
+
+async function toggleCasino(id, currentStatus) {
+    await fetch(`/api/admin/casinos/${id}/toggle`, {
+        method: 'PATCH',
+        headers: getAdminHeaders(),
+        body: JSON.stringify({ is_active: currentStatus ? 0 : 1 })
+    });
+    loadCasinos();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = sessionStorage.getItem('admin_passcode');
+    if (saved) {
+        unlockAdmin();
+    }
+});
+</script>
+</body>
+</html>
