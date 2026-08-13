@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full Guide: How Sweeps & Freebies Work — FreeSCList</title>
+<meta name="description" content="A complete walkthrough of how sweepstakes casino freebies work, how much you can realistically earn, which casinos to start with, and answers to common questions.">
+<link rel="canonical" href="https://www.freesclist.com/full-guide">
+
+<meta property="og:site_name" content="FreeSCList">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Full Guide: How Sweeps & Freebies Work — FreeSCList">
+<meta property="og:description" content="A complete walkthrough of how sweepstakes casino freebies work and how to make the most of them.">
+<meta property="og:url" content="https://www.freesclist.com/full-guide">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Full Guide: How Sweeps & Freebies Work — FreeSCList">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5438417314663009" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   FreeSCList — stylesheet (dark theme, adjusted for readability & alignment)
+   ========================================================================== */
+
+:root{
+  --bg:            #0A0A0B;
+  --bg-panel:      #111214;
+  --bg-panel-2:    #0D0D0E;
+  --ink:           #F7F5F1;
+  --ink-soft:      #D4D1C9;
+  --ink-faint:     #9A9790;
+  --gold:          #CDA23D;
+  --gold-soft:     #E4C878;
+  --teal:          #1F6B5C;
+  --border:        rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.22);
+
+  --font-display: 'Baloo 2', 'Fredoka', sans-serif;
+  --font-body:    'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --container: 1100px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 18px; /* Increased baseline readability */
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ max-width: 100%; display: block; }
+a{ color: inherit; text-decoration: none; }
+ul{ margin: 0; padding: 0; list-style: none; }
+button{ font-family: inherit; cursor: pointer; }
+
+.container{
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible{
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ==========================================================================
+   Header / nav
+   ========================================================================== */
+.site-header{
+  position: relative;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 16px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 16px 6px 8px;
+}
+
+.brand-mark{ width: 40px; height: 40px; flex: none; }
+
+.brand-word{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.brand-word .sc{ color: var(--gold); }
+
+.nav-links{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-links a{
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.nav-links a:hover{ color: var(--ink); }
+.nav-links a.is-active{ color: var(--ink); border-color: var(--ink); }
+
+.nav-toggle{
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+}
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after{
+  content: "";
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--ink);
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle span::before{ position: absolute; top: -6px; }
+.nav-toggle span::after{ position: absolute; top: 6px; }
+.nav-toggle[aria-expanded="true"] span{ background: transparent; }
+.nav-toggle[aria-expanded="true"] span::before{ transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span::after{ transform: translateY(-6px) rotate(-45deg); }
+
+/* ==========================================================================
+   Full guide Layout & Typo
+   ========================================================================== */
+.guide-hero{ 
+  padding-block: 60px 20px; 
+  text-align: center;
+}
+.guide-hero h1{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  margin: 0 auto 20px;
+  color: var(--ink);
+  max-width: 900px;
+  line-height: 1.15;
+}
+.guide-hero p{ 
+  max-width: 800px; 
+  margin: 0 auto;
+  color: var(--ink-soft); 
+  font-size: 1.15rem; 
+}
+
+.guide-block{ 
+  max-width: 860px; 
+  margin: 0 auto 56px; 
+}
+.guide-block h2{
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+.guide-block p{ 
+  color: var(--ink-soft); 
+  margin: 0 0 20px; 
+  font-size: 1.12rem; 
+}
+
+.casino-guide{ 
+  max-width: 1000px;
+  margin: 0 auto 64px; 
+}
+
+.casino-guide-list{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.casino-card{
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+}
+.casino-card h3{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.65rem;
+  color: var(--gold);
+  margin: 0 0 16px;
+}
+.casino-card h3 a{
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+.casino-card h3 a:hover{
+  color: var(--gold-soft);
+  text-decoration: underline;
+}
+.casino-card p{ 
+  color: var(--ink-soft); 
+  font-size: 1.05rem; 
+  margin: 0 0 16px; 
+  line-height: 1.65;
+}
+.casino-card p:last-child{ margin-bottom: 0; }
+
+.faq{ 
+  max-width: 860px; 
+  margin: 0 auto 64px; 
+}
+.faq-item{ border-bottom: 1px solid var(--border); }
+.faq-item:first-child{ border-top: 1px solid var(--border); }
+.faq-q{
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 2px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.faq-q .plus{
+  flex: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.faq-q .plus::before,
+.faq-q .plus::after{ content: ""; position: absolute; background: var(--ink); }
+.faq-q .plus::before{ width: 12px; height: 1.5px; }
+.faq-q .plus::after{ width: 1.5px; height: 12px; transition: transform 0.2s ease; }
+.faq-item.is-open .plus::after{ transform: rotate(90deg); }
+.faq-item.is-open .plus{ background: var(--gold); border-color: var(--gold); }
+.faq-item.is-open .plus::before,
+.faq-item.is-open .plus::after{ background: #1A1A1A; }
+.faq-a{ max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+.faq-a p{ color: var(--ink-soft); padding: 0 2px 24px; margin: 0; font-size: 1.08rem; }
+.faq-item.is-open .faq-a{ max-height: 500px; }
+
+.closing-cta{ text-align: center; max-width: 760px; margin: 0 auto; }
+.closing-cta h2{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.1rem;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.closing-cta p{ color: var(--ink-soft); margin: 0 0 30px; font-size: 1.12rem; }
+
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: 1px solid transparent;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+.btn-primary{
+  background: var(--gold);
+  color: #1A1A1A;
+}
+.btn-primary:hover{ transform: translateY(-1px); background: var(--gold-soft); }
+
+/* ==========================================================================
+   Ad slots
+   ========================================================================== */
+.ad-slot{ max-width: 860px; margin: 32px auto 48px; }
+.ad-slot .ad-slot-inner{
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer{
+  background: #000;
+  border-top: 1px solid var(--border);
+  margin-top: 80px;
+}
+.footer-inner{
+  padding-block: 50px 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+.footer-brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+.footer-brand .sc{ color: var(--gold); }
+.footer-links{ display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; }
+.footer-links a{
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.footer-links a:hover{ color: var(--ink); }
+.footer-email a{ color: var(--gold); font-weight: 600; font-size: 1rem; }
+.footer-fine{ font-size: 0.85rem; color: var(--ink-faint); }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 960px){
+  .casino-guide-list{ grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 760px){
+  .nav-toggle{ display: inline-flex; }
+  .nav-links{
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 20px 18px;
+    gap: 2px;
+    display: none;
+    z-index: 1000;
+  }
+  .nav-links.is-open{ display: flex; }
+  .nav-links a{ padding: 14px; border-bottom: none; }
+  .casino-guide-list{ grid-template-columns: 1fr; }
+}
+</style>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Verification with these sites","acceptedAnswer":{"@type":"Answer","text":"Many of these platforms use trusted third-party verification providers to securely verify your identity and personal information. Only submit your personal information through the official casino website or verification provider."}},
+{"@type":"Question","name":"How do payouts work for social sweeps?","acceptedAnswer":{"@type":"Answer","text":"Most platforms give you a choice between gift cards or cash prizes. Gift cards are usually processed and delivered faster. Cash redemptions may require additional verification."}},
+{"@type":"Question","name":"How often should I check for dailies?","acceptedAnswer":{"@type":"Answer","text":"Most professional players check at least once every 24 hours, and checking twice a day is a recommended strategy since some offers are time-sensitive."}},
+{"@type":"Question","name":"Are there limits on how much I can claim?","acceptedAnswer":{"@type":"Answer","text":"Every platform has its own rules. Login bonuses are typically once per day, while other link-based tokens may be limited per user per promotion."}},
+{"@type":"Question","name":"What happens if a bonus link fails?","acceptedAnswer":{"@type":"Answer","text":"Try clearing your browser cache or opening the page in an incognito window. If it persists, the offer has likely concluded."}}
+]}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="16" width="28" height="18" rx="2" fill="#1F6B5C"/>
+        <rect x="6" y="16" width="28" height="6" fill="#164F44"/>
+        <rect x="17.5" y="16" width="5" height="18" fill="#164F44"/>
+        <path d="M20 16c-3-6-10-6-8-1 1 2.5 5 1.5 8 1z" fill="#CDA23D"/>
+        <path d="M20 16c3-6 10-6 8-1-1 2.5-5 1.5-8 1z" fill="#CDA23D"/>
+        <path d="M31 6l1 2.4 2.4 1-2.4 1L31 12l-1-1.6-2.4-1 2.4-1z" fill="#E4C878"/>
+      </svg>
+      <span class="brand-word">Free<span class="sc">SC</span>List</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="casinos.html">Dailys</a>
+      <a href="about-us.html">About Us</a>
+      <a href="full-guide.html" class="is-active">Full Guide</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="guide-hero">
+    <div class="container">
+      <h1>Full Guide: How Sweeps &amp; Freebies Work</h1>
+      <p>This page will walk you through the complete process of earning extra income from online sweepstakes casinos. We'll cover everything from finding daily freebies and claiming rewards to building a consistent routine that helps you make the most of the offers available.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot" aria-hidden="true">
+    <div class="ad-slot-inner">Ad slot — see README.md</div>
+  </div>
+
+  <section style="padding-block: 0;">
+    <div class="container">
+
+      <div class="guide-block">
+        <h2>Why Do Online Casinos Give Out Free Money?</h2>
+        <p>The answer comes down to how sweepstakes promotions work in the United States. Legitimate sweepstakes generally need to provide a free method of entry—meaning participants must have a way to participate without making a purchase or payment.</p>
+        <p>Many sweepstakes casinos use this model by offering Sweeps Coins (SC) through free promotional methods, including daily promotions, email offers, and other giveaways. These promotions help attract and retain players while giving users opportunities to collect SC without making a purchase.</p>
+        <p>That's why you'll often see casinos offering daily free SC. While the exact amount and frequency varies from casino to casino, some platforms offer around 1 SC per day, and when you collect offers across multiple platforms, those small rewards can really add up.</p>
+      </div>
+
+      <div class="guide-block">
+        <h2>How Much Money Can I Make?</h2>
+        <p>It really depends on how many offers you claim and how consistent you are.</p>
+        <p>Some casinos offer around $1 in free SC per day, while others may offer $0.50 or less. When you consistently claim offers across multiple platforms, it's possible to collect around $20–$25+ per day, although your actual amount will vary depending on the available promotions.</p>
+        <p>The best part is that it doesn't have to take much time. Once you know where to find the offers, you could potentially go through your daily promos in around 8 minutes.</p>
+        <p>If you're able to collect $20–$25 worth of rewards in roughly 8 minutes, that's a pretty reasonable return for a few minutes of your time each day.</p>
+        <p>The key is consistency. Missing a day here and there means leaving free rewards on the table, while making it part of your daily routine can help those small offers add up.</p>
+      </div>
+
+      <div class="casino-guide">
+        <div class="guide-block" style="margin-bottom: 0;">
+          <h2>Get Started</h2>
+          <p>These are the casinos I recommend starting with if you're new to collecting daily freebies. Each of these platforms offers around $1 in free SC per day, making them a simple way to get started.</p>
+          <p>I recommend sticking with these casinos consistently for a while to see if this is something you enjoy. It isn't for everyone, and that's completely fine.</p>
+          <p>I've specifically chosen these platforms because they're easy to understand, simple to navigate, and beginner-friendly. Once you get comfortable with these, you can explore additional platforms and offers.</p>
+        </div>
+
+        <div class="casino-guide-list">
+          <div class="casino-card">
+            <h3><a href="https://stake.us/?c=qfRRRydF" target="_blank" rel="noopener noreferrer">Stake</a></h3>
+            <p>Stake.us offers around 1 SC every day through its daily reward. Once you've accumulated enough SC to meet the minimum redemption threshold, typically around 30–40 SC, you can request a redemption.</p>
+            <p>One of the biggest advantages is that the daily SC doesn't require you to play it through before redeeming. You can simply collect your daily rewards, build up your balance, and redeem once you meet the required threshold and other eligibility requirements.</p>
+          </div>
+          <div class="casino-card">
+            <h3><a href="https://realprize.com/refer/995156" target="_blank" rel="noopener noreferrer">RealPrize</a></h3>
+            <p>RealPrize offers around 0.40 SC each day through its daily reward. However, it also frequently sends out email promotions, which can add another 1 SC or more depending on the promotion.</p>
+            <p>RealPrize also runs free spin promotions, giving you additional opportunities to win SC without making a purchase. Some of these promotions can even have prizes of up to 50 SC. I've personally hit the 50 SC jackpot several times, making these promotions worth checking regularly.</p>
+          </div>
+          <div class="casino-card">
+            <h3><a href="https://crowncoinscasino.com/?utm_campaign=6709c517-3553-4483-9486-8586d06db5c8&utm_source=friends" target="_blank" rel="noopener noreferrer">CrownCoinsCasino</a></h3>
+            <p>CrownCoins Casino offers around 1 SC per day through its daily rewards. In addition to the daily login bonus, CrownCoins may also send email promotions that can provide around 1 SC every 1–2 days.</p>
+            <p>That means there can be multiple opportunities to collect free SC throughout the week. Make sure to check both the casino and your email regularly so you don't miss any available promotions.</p>
+          </div>
+          <div class="casino-card">
+            <h3><a href="https://lonestarcasino.com/refer/1159320" target="_blank" rel="noopener noreferrer">LoneStar</a></h3>
+            <p>LoneStar Casino is similar to RealPrize and is owned by the same company, so you'll notice a lot of similarities between the two platforms.</p>
+            <p>It offers daily rewards along with additional promotional opportunities through email offers and free spin promotions. If you're already checking RealPrize regularly, it's worth adding LoneStar to your daily routine as well so you don't miss any of the extra SC opportunities.</p>
+          </div>
+          <div class="casino-card">
+            <h3><a href="https://www.zulacasino.com/signup/ca8a8054-e64f-4c39-a32d-685109449b06" target="_blank" rel="noopener noreferrer">ZulaCasino</a></h3>
+            <p>Zula Casino offers around 1 SC each day through its daily reward. You can continue collecting your free SC until you reach the minimum redemption threshold of 50 SC.</p>
+          </div>
+          <div class="casino-card">
+            <h3><a href="https://www.pulsz.com/?invited_by=z1q1re" target="_blank" rel="noopener noreferrer">Pulsz</a></h3>
+            <p>Pulsz offers daily rewards that average around 0.70 SC per day, giving you another easy way to build up your balance over time.</p>
+            <p>Pulsz also has a weekly spinner available from Friday through Sunday, where you can spin for additional rewards, including SC and free spins. I recommend checking in during the weekend so you don't miss the weekly spinner.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-block">
+        <h2>Common Questions</h2>
+      </div>
+
+      <div class="faq">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Verification With These Sites<span class="plus"></span></button>
+          <div class="faq-a">
+            <p>Many of these platforms use trusted third-party verification providers to securely verify your identity and personal information.</p>
+            <p>This means your documents may be processed through an established verification service rather than being handled directly by the casino. These providers use security measures designed to protect your information during the verification process.</p>
+            <p>As always, only submit your personal information through the official casino website or verification provider, and avoid sending identification documents through unofficial links or messages.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How do payouts work for social sweeps?<span class="plus"></span></button>
+          <div class="faq-a">
+            <p>When you're ready to redeem your Sweeps Coins, most platforms will give you a choice between gift cards or cash prizes, depending on the casino and its available redemption options.</p>
+            <p>Gift cards are usually the easier option. They tend to be processed and delivered faster, and you generally don't need to provide your bank account information.</p>
+            <p>If you choose a cash redemption, the platform may require additional verification and payment information before sending your funds. Processing times can vary depending on the platform and payment method.</p>
+            <p>Always check the specific casino's current redemption rules before requesting a payout.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How often should I check for dailies?<span class="plus"></span></button>
+          <div class="faq-a">
+            <p>Success in maximizing your freebies relies on consistency. Most professional players check for daily login bonuses and promotional links at least once every 24 hours. Some offers are time-sensitive and may expire within a few hours, so checking the Dailys page twice a day—once in the morning and once at night—is a highly recommended strategy.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Are there limits on how much I can claim?<span class="plus"></span></button>
+          <div class="faq-a">
+            <p>Every platform has its own set of rules regarding promotional claims. While login bonuses are typically available once per day, other link-based tokens might be limited to once per user per promotion. Always review the specific terms and conditions for each casino to understand their redemption limits and eligibility requirements.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What happens if a bonus link fails?<span class="plus"></span></button>
+          <div class="faq-a">
+            <p>Occasionally, a promotional link may encounter an error if it has expired or if the maximum number of claims has been reached. If a link fails to load, try clearing your browser cache or opening the page in an incognito window. If the issue persists, the offer has likely concluded, and you should move on to the next available daily drop.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="closing-cta">
+        <h2>Ready to Start?</h2>
+        <p>The world of social sweepstakes is always evolving. Make sure to bookmark this Full Guide so you can refer back to the step-by-step process whenever you need. Don't forget to check the Dailys page every single day to maximize your free Sweeps Coin collection and stay ahead of the game.</p>
+        <a href="casinos.html" class="btn btn-primary">Go to Dailys</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <svg width="26" height="26" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="16" width="28" height="18" rx="2" fill="#1F6B5C"/>
+        <rect x="6" y="16" width="28" height="6" fill="#164F44"/>
+        <rect x="17.5" y="16" width="5" height="18" fill="#164F44"/>
+        <path d="M20 16c-3-6-10-6-8-1 1 2.5 5 1.5 8 1z" fill="#CDA23D"/>
+        <path d="M20 16c3-6 10-6 8-1-1 2.5-5 1.5-8 1z" fill="#CDA23D"/>
+      </svg>
+      Free<span class="sc">SC</span>List
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="casinos.html">Dailys</a>
+      <a href="about-us.html">About Us</a>
+      <a href="full-guide.html">Full Guide</a>
+    </nav>
+    <p class="footer-email"><a href="mailto:freesclist@gmail.com">freesclist@gmail.com</a></p>
+    <p class="footer-fine">© 2026 FreeSCList. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================================
+   FreeSCList — main.js
+   Mobile nav, FAQ accordion.
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+  initNavToggle();
+  initFaq();
+});
+
+/* -- mobile nav -------------------------------------------------------- */
+function initNavToggle() {
+  var toggle = document.querySelector('.nav-toggle');
+  var links = document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  toggle.addEventListener('click', function () {
+    var open = links.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+/* -- FAQ accordion ------------------------------------------------------ */
+function initFaq() {
+  var items = document.querySelectorAll('.faq-item');
+  if (!items.length) return;
+
+  items.forEach(function (item) {
+    var q = item.querySelector('.faq-q');
+    if (!q) return;
+    q.addEventListener('click', function () {
+      var isOpen = item.classList.contains('is-open');
+      items.forEach(function (i) { i.classList.remove('is-open'); i.querySelector('.faq-q').setAttribute('aria-expanded', 'false'); });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+}
+
+</script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a7ca4ae1244161d4e4a9643/1jvre6ike';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+</html>
