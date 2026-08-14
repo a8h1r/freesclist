@@ -8,7 +8,7 @@ function generateId() {
     return Math.random().toString(36).substring(2, 15);
 }
 
-const ADMIN_PASSCODE = process.env.ADMIN_PASSCODE || 'admin123';
+const ADMIN_PASSCODE = process.env.ADMIN_PASSCODE || 'FreeSC!Admin#2026';
 
 // Admin Auth Middleware
 router.use((req, res, next) => {
