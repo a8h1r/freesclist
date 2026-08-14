@@ -737,11 +737,32 @@ var DAILIES_DATA = [
   }
 ];
 
+function getTodayEST() {
+  var now = new Date();
+  var options = { month: 'long', day: 'numeric', timeZone: 'America/New_York' };
+  var parts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
+  var month = '', day = '';
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].type === 'month') month = parts[i].value;
+    if (parts[i].type === 'day') day = parts[i].value;
+  }
+  var num = parseInt(day, 10);
+  var suffix = 'th';
+  if (num % 10 === 1 && num % 100 !== 11) suffix = 'st';
+  else if (num % 10 === 2 && num % 100 !== 12) suffix = 'nd';
+  else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
+  return month + ' ' + day + suffix;
+}
+
 function initDailies() {
   var mount = document.getElementById('ledger-mount');
   if (!mount) return;
 
   mount.innerHTML = '';
+  
+  if (DAILIES_DATA.length > 0) {
+    DAILIES_DATA[0].date = getTodayEST();
+  }
 
   DAILIES_DATA.forEach(function (group) {
     var heading = document.createElement('h2');
