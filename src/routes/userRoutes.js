@@ -45,6 +45,22 @@ router.post('/watchlist', (req, res) => {
     });
 });
 
+// GET all active freebies
+router.get('/freebies', (req, res) => {
+    const query = `
+        SELECT f.id, f.claim_url, f.title, f.created_at, c.name as casino_name
+        FROM freebies f
+        JOIN casinos c ON f.casino_id = c.id
+        WHERE c.is_active = 1 AND f.created_at >= datetime('now', '-3 days')
+        ORDER BY f.created_at DESC
+    `;
+
+    db.all(query, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
 // GET filtered feed based on user's watchlist
 router.get('/freebies/my-list', (req, res) => {
     const { userId } = req.query;
@@ -55,7 +71,7 @@ router.get('/freebies/my-list', (req, res) => {
         FROM freebies f
         JOIN casinos c ON f.casino_id = c.id
         JOIN user_watchlist w ON w.casino_id = c.id
-        WHERE w.user_id = ? AND c.is_active = 1
+        WHERE w.user_id = ? AND c.is_active = 1 AND f.created_at >= datetime('now', '-3 days')
         ORDER BY f.created_at DESC
     `;
 

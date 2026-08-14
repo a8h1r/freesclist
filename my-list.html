@@ -201,23 +201,63 @@ async function loadFeed() {
     const feedRes = await fetch('/api/freebies/my-list?userId=' + userId);
     const feed = await feedRes.json();
     const mount = document.getElementById('feed-mount');
-    
-    if (feed.length === 0) {
+
+    // 1. Generate valid 3 days
+    const validDays = [];
+    const now = new Date();
+    for (let i = 0; i < 3; i++) {
+        let d = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        d.setDate(d.getDate() - i);
+        let options = { month: 'long', day: 'numeric' };
+        let parts = new Intl.DateTimeFormat('en-US', options).formatToParts(d);
+        let month = '', day = '';
+        for (let j = 0; j < parts.length; j++) {
+            if (parts[j].type === 'month') month = parts[j].value;
+            if (parts[j].type === 'day') day = parts[j].value;
+        }
+        let num = parseInt(day, 10);
+        let suffix = 'th';
+        if (num % 10 === 1 && num % 100 !== 11) suffix = 'st';
+        else if (num % 10 === 2 && num % 100 !== 12) suffix = 'nd';
+        else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
+        validDays.push(month + ' ' + day + suffix);
+    }
+
+    // 2. Group by Date, filtering to only valid days
+    const groups = {};
+    feed.forEach(item => {
+        const d = new Date(item.created_at);
+        const dEst = new Date(d.toLocaleString('en-US', {timeZone: 'America/New_York'}));
+        const parts = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).formatToParts(dEst);
+        let m = '', dayVal = '';
+        for (let j = 0; j < parts.length; j++) {
+            if (parts[j].type === 'month') m = parts[j].value;
+            if (parts[j].type === 'day') dayVal = parts[j].value;
+        }
+        let num = parseInt(dayVal, 10);
+        let suf = 'th';
+        if (num % 10 === 1 && num % 100 !== 11) suf = 'st';
+        else if (num % 10 === 2 && num % 100 !== 12) suf = 'nd';
+        else if (num % 10 === 3 && num % 100 !== 13) suf = 'rd';
+        const dateStr = m + ' ' + dayVal + suf;
+
+        if (validDays.includes(dateStr)) {
+            if (!groups[dateStr]) groups[dateStr] = [];
+            groups[dateStr].push(item);
+        }
+    });
+
+    // Sort keys based on validDays order to ensure Today is first
+    const sortedDates = validDays.filter(dayStr => groups[dayStr]);
+
+    mount.innerHTML = '';
+
+    if (sortedDates.length === 0) {
         mount.innerHTML = '<p style="color:var(--ink-faint); padding-top: 20px;">No daily freebies available for your selected casinos yet. Click "Filter Casinos" above to choose your casinos or check back soon!</p>';
         return;
     }
 
-    // Group by Date
-    const groups = {};
-    feed.forEach(item => {
-        const d = new Date(item.created_at);
-        const dateStr = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) + getOrdinalSuffix(d.getDate());
-        if (!groups[dateStr]) groups[dateStr] = [];
-        groups[dateStr].push(item);
-    });
-
-    mount.innerHTML = '';
-    Object.keys(groups).forEach(date => {
+    sortedDates.forEach(date => {
         const dateHeading = document.createElement('h2');
         dateHeading.className = 'date-heading';
         dateHeading.textContent = date;

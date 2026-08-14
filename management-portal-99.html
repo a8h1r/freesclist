@@ -37,9 +37,71 @@ table{ width: 100%; border-collapse: collapse; margin-top: 16px; }
 th, td{ text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
 th{ color: var(--ink); }
 .btn-sm{ padding: 4px 10px; font-size: 0.8rem; }
+
+/* Custom Modal */
+#customModalOverlay {
+    position: fixed; inset: 0; background: rgba(10, 10, 11, 0.85);
+    z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;
+    backdrop-filter: blur(4px);
+}
+#customModal {
+    background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 32px; max-width: 420px; width: 100%; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+#customModal h3 { margin-top: 0; color: var(--gold); font-family: var(--font-display); }
+#customModal p { color: var(--ink-soft); margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 12px; justify-content: center; }
+.btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--ink); }
+.btn-cancel:hover { background: rgba(255,255,255,0.05); }
+
+/* Toast Notification */
+#toastContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10001;
+}
+.toast {
+    background: var(--bg-panel);
+    border-left: 4px solid var(--gold);
+    color: var(--ink);
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    font-weight: 700;
+    font-family: var(--font-body);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+.toast.success { border-left-color: #50beaf; }
+.toast.error { border-left-color: #dc3545; }
 </style>
 </head>
 <body>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer"></div>
+
+<!-- Custom Confirm Modal -->
+<div id="customModalOverlay">
+    <div id="customModal">
+        <h3>Deactivate Casino</h3>
+        <p id="customModalText">Are you sure you want to deactivate?</p>
+        <div class="modal-actions">
+            <button class="btn btn-cancel" id="btnModalCancel">Cancel</button>
+            <button class="btn" style="background: #dc3545; color: white;" id="btnModalConfirm">Deactivate</button>
+        </div>
+    </div>
+</div>
 
 <!-- Passcode Lock Screen Overlay -->
 <div id="lockScreen" style="position: fixed; inset: 0; background: #0A0A0B; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;">
@@ -78,6 +140,19 @@ th{ color: var(--ink); }
             </div>
             <button type="submit" class="btn">Publish Freebie & Send Alerts</button>
             <div id="freebieBadge" class="badge"></div>
+        </form>
+    </div>
+
+    <!-- Remove Casino -->
+    <div class="card">
+        <h2>Remove Casino</h2>
+        <form id="removeCasinoForm">
+            <div class="form-group">
+                <label>Select Casino to Permanently Delete</label>
+                <select id="removeCasinoSelect" required></select>
+            </div>
+            <button type="submit" class="btn" style="background: #dc3545; color: white;">Delete Casino</button>
+            <div id="removeCasinoBadge" class="badge"></div>
         </form>
     </div>
 
@@ -137,6 +212,20 @@ th{ color: var(--ink); }
 </div>
 
 <script>
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
 function getAdminHeaders() {
     return {
         'Content-Type': 'application/json',
@@ -176,6 +265,9 @@ async function loadCasinos() {
     // Populate select
     const select = document.getElementById('casinoSelect');
     select.innerHTML = '<option value="">-- Choose --</option>';
+
+    const removeSelect = document.getElementById('removeCasinoSelect');
+    removeSelect.innerHTML = '<option value="">-- Choose --</option>';
     
     // Populate table
     const tbody = document.getElementById('casinoTable');
@@ -191,6 +283,7 @@ async function loadCasinos() {
         if (c.is_active === 1) {
             select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
         }
+        removeSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
         
         tbody.innerHTML += `
             <tr>
@@ -198,7 +291,7 @@ async function loadCasinos() {
                 <td>${c.referral_url ? 'Set' : 'None'}</td>
                 <td style="color:${c.is_active ? '#50beaf' : '#dc3545'}">${c.is_active ? 'Active' : 'Inactive'}</td>
                 <td>
-                    <button class="btn btn-sm" onclick="toggleCasino('${c.id}', ${c.is_active})">Toggle</button>
+                    <button class="btn btn-sm" onclick="toggleCasino('${c.id}', ${c.is_active}, '${c.name.replace(/'/g, "\\'")}')">${c.is_active ? 'DEACTIVATE' : 'ACTIVATE'}</button>
                 </td>
             </tr>
         `;
@@ -223,15 +316,11 @@ document.getElementById('freebieForm').addEventListener('submit', async (e) => {
     });
     
     const data = await res.json();
-    const badge = document.getElementById('freebieBadge');
-    
     if (data.success) {
-        badge.className = 'badge success';
-        badge.textContent = 'Published! Clean URL: ' + data.claim_url;
+        showToast('Published! Clean URL: ' + data.claim_url, 'success');
         e.target.reset();
     } else {
-        badge.className = 'badge error';
-        badge.textContent = data.error || 'Failed to publish';
+        showToast(data.error || 'Failed to publish', 'error');
     }
     btn.disabled = false;
 });
@@ -252,13 +341,10 @@ document.getElementById('dateForm').addEventListener('submit', async (e) => {
         body: JSON.stringify({ value: val })
     });
     const data = await res.json();
-    const badge = document.getElementById('dateBadge');
     if (data.success) {
-        badge.className = 'badge success';
-        badge.textContent = 'Updated to: ' + data.value;
+        showToast('Updated to: ' + data.value, 'success');
     } else {
-        badge.className = 'badge error';
-        badge.textContent = 'Failed to update';
+        showToast('Failed to update', 'error');
     }
 });
 
@@ -280,12 +366,40 @@ document.getElementById('casinoForm').addEventListener('submit', async (e) => {
         headers: getAdminHeaders(),
         body: JSON.stringify(body)
     });
+    showToast(`${body.name} added successfully!`, 'success');
     e.target.reset();
     document.getElementById('topSitesFields').style.display = 'none'; // reset UI
     loadCasinos();
 });
 
-async function toggleCasino(id, currentStatus) {
+let modalConfirmResolve = null;
+
+function showConfirmModal(title, text, confirmBtnText) {
+    return new Promise(resolve => {
+        document.querySelector('#customModal h3').textContent = title;
+        document.getElementById('customModalText').textContent = text;
+        document.getElementById('btnModalConfirm').textContent = confirmBtnText;
+        document.getElementById('customModalOverlay').style.display = 'flex';
+        modalConfirmResolve = resolve;
+    });
+}
+
+document.getElementById('btnModalCancel').addEventListener('click', () => {
+    document.getElementById('customModalOverlay').style.display = 'none';
+    if(modalConfirmResolve) modalConfirmResolve(false);
+});
+
+document.getElementById('btnModalConfirm').addEventListener('click', () => {
+    document.getElementById('customModalOverlay').style.display = 'none';
+    if(modalConfirmResolve) modalConfirmResolve(true);
+});
+
+async function toggleCasino(id, currentStatus, name) {
+    if (currentStatus === 1) {
+        const confirmed = await showConfirmModal('Deactivate Casino', `Are you sure you want to deactivate ${name} and hide it everywhere?`, 'Deactivate');
+        if (!confirmed) return;
+    }
+    
     await fetch(`/api/admin/casinos/${id}/toggle`, {
         method: 'PATCH',
         headers: getAdminHeaders(),
@@ -293,6 +407,36 @@ async function toggleCasino(id, currentStatus) {
     });
     loadCasinos();
 }
+
+document.getElementById('removeCasinoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const select = document.getElementById('removeCasinoSelect');
+    const id = select.value;
+    const name = select.options[select.selectedIndex].text;
+    
+    if (!id) return;
+
+    const confirmed = await showConfirmModal('Delete Casino', `Are you sure you want to permanently delete ${name}? This cannot be undone.`, 'Delete');
+    if (!confirmed) return;
+
+    const btn = e.target.querySelector('button');
+    btn.disabled = true;
+
+    const res = await fetch(`/api/admin/casinos/${id}`, {
+        method: 'DELETE',
+        headers: getAdminHeaders()
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+        showToast(`${name} deleted successfully`, 'success');
+        loadCasinos();
+    } else {
+        showToast(data.error || 'Failed to delete', 'error');
+    }
+    btn.disabled = false;
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const saved = sessionStorage.getItem('admin_passcode');

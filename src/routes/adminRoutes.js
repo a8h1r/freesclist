@@ -55,6 +55,15 @@ router.patch('/casinos/:id/toggle', (req, res) => {
     );
 });
 
+// DELETE permanently delete casino
+router.delete('/casinos/:id', (req, res) => {
+    const { id } = req.params;
+    db.run(`DELETE FROM casinos WHERE id = ?`, [id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
+});
+
 // POST publish freebie
 router.post('/freebies', (req, res) => {
     const { casino_id, claim_url, title } = req.body;

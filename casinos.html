@@ -737,38 +737,99 @@ var DAILIES_DATA = [
   }
 ];
 
-function getTodayEST() {
-  var now = new Date();
-  var options = { month: 'long', day: 'numeric', timeZone: 'America/New_York' };
-  var parts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
-  var month = '', day = '';
-  for (var i = 0; i < parts.length; i++) {
-    if (parts[i].type === 'month') month = parts[i].value;
-    if (parts[i].type === 'day') day = parts[i].value;
-  }
-  var num = parseInt(day, 10);
-  var suffix = 'th';
-  if (num % 10 === 1 && num % 100 !== 11) suffix = 'st';
-  else if (num % 10 === 2 && num % 100 !== 12) suffix = 'nd';
-  else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
-  return month + ' ' + day + suffix;
-}
-
-function initDailies() {
+async function initDailies() {
   var mount = document.getElementById('ledger-mount');
   if (!mount) return;
-
   mount.innerHTML = '';
   
-  var today = getTodayEST();
-  if (DAILIES_DATA.length === 0 || DAILIES_DATA[0].date !== today) {
-    DAILIES_DATA.unshift({
-      date: today,
-      entries: []
-    });
+  // 1. Get the 3 valid day strings (today, yesterday, day before)
+  var validDays = [];
+  var now = new Date();
+  for(var i=0; i<3; i++) {
+    var d = new Date(now.toLocaleString('en-US', {timeZone: 'America/New_York'}));
+    d.setDate(d.getDate() - i);
+    
+    var options = { month: 'long', day: 'numeric' };
+    var parts = new Intl.DateTimeFormat('en-US', options).formatToParts(d);
+    var month = '', day = '';
+    for (var j = 0; j < parts.length; j++) {
+      if (parts[j].type === 'month') month = parts[j].value;
+      if (parts[j].type === 'day') day = parts[j].value;
+    }
+    var num = parseInt(day, 10);
+    var suffix = 'th';
+    if (num % 10 === 1 && num % 100 !== 11) suffix = 'st';
+    else if (num % 10 === 2 && num % 100 !== 12) suffix = 'nd';
+    else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
+    validDays.push(month + ' ' + day + suffix);
+  }
+  
+  var todayStr = validDays[0];
+
+  // 2. Fetch live data
+  var liveData = [];
+  try {
+    var res = await fetch('/api/freebies');
+    if (res.ok) liveData = await res.json();
+  } catch (e) {
+    console.error("Failed to fetch live freebies", e);
   }
 
-  DAILIES_DATA.forEach(function (group) {
+  // 3. Group live data by date string
+  var dbGroups = {};
+  liveData.forEach(function(item) {
+    var d = new Date(item.created_at);
+    var dEst = new Date(d.toLocaleString('en-US', {timeZone: 'America/New_York'}));
+    var options = { month: 'long', day: 'numeric' };
+    var parts = new Intl.DateTimeFormat('en-US', options).formatToParts(dEst);
+    var m = '', dayVal = '';
+    for (var j = 0; j < parts.length; j++) {
+      if (parts[j].type === 'month') m = parts[j].value;
+      if (parts[j].type === 'day') dayVal = parts[j].value;
+    }
+    var num = parseInt(dayVal, 10);
+    var suf = 'th';
+    if (num % 10 === 1 && num % 100 !== 11) suf = 'st';
+    else if (num % 10 === 2 && num % 100 !== 12) suf = 'nd';
+    else if (num % 10 === 3 && num % 100 !== 13) suf = 'rd';
+    var ds = m + ' ' + dayVal + suf;
+    
+    if (!dbGroups[ds]) dbGroups[ds] = [];
+    
+    var existing = dbGroups[ds].find(function(e) { return e.casino === item.casino_name; });
+    if (existing) {
+      existing.offers.push({ label: item.title || 'Free SC Offer', href: item.claim_url });
+    } else {
+      dbGroups[ds].push({
+        casino: item.casino_name,
+        offers: [{ label: item.title || 'Free SC Offer', href: item.claim_url }]
+      });
+    }
+  });
+
+  // 4. Merge DAILIES_DATA and live DB data, ensuring order: today, yesterday, day before
+  var finalGroups = [];
+  
+  validDays.forEach(function(dayStr) {
+    var entries = [];
+    // From DB
+    if (dbGroups[dayStr]) {
+      entries = entries.concat(dbGroups[dayStr]);
+    }
+    // From Static DAILIES_DATA
+    var staticGroup = DAILIES_DATA.find(function(g) { return g.date === dayStr; });
+    if (staticGroup && staticGroup.entries) {
+      entries = entries.concat(staticGroup.entries);
+    }
+    
+    // Only push if we have entries, OR if it's today (we want to show empty state for today)
+    if (entries.length > 0 || dayStr === todayStr) {
+      finalGroups.push({ date: dayStr, entries: entries });
+    }
+  });
+
+  // 5. Render
+  finalGroups.forEach(function (group) {
     var heading = document.createElement('h2');
     heading.className = 'date-heading';
     heading.textContent = group.date;
