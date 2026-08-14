@@ -188,7 +188,7 @@ input:focus-visible{
 
 .hero-inner{
   position: relative;
-  padding-block: 120px 130px;
+  padding-block: 15px 55px;
   text-align: center;
   max-width: 900px;
   margin-inline: auto;
@@ -200,15 +200,32 @@ input:focus-visible{
   font-size: clamp(2.4rem, 6.4vw, 4.6rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
-  margin: 0 0 30px;
+  margin: 0 0 24px;
   color: var(--ink);
 }
 
 .hero p.lede{
   font-size: 1.2rem;
   color: var(--ink-soft);
-  max-width: 560px;
-  margin: 0 auto 44px;
+  max-width: 640px;
+  margin: 0 auto 36px;
+}
+.hero p.lede a{
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.hero p.lede a:hover{
+  color: var(--gold);
+}
+
+.hero-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .btn{
@@ -601,7 +618,7 @@ section{ padding-block: 72px; }
   }
   .nav-links.is-open{ display: flex; }
   .nav-links a{ padding: 14px; border-bottom: none; }
-  .hero-inner{ padding-block: 80px 70px; }
+  .hero-inner{ padding-block: 10px 40px; }
   .casino-guide-list{ grid-template-columns: 1fr; }
   .casino-card{ border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 28px; }
   .casino-guide-list{ border-top: none; }
@@ -650,37 +667,11 @@ section{ padding-block: 72px; }
 <main>
   <section class="hero">
     <div class="container hero-inner">
-      <h1>Your Daily Drop of Free Sweeps</h1>
-      <p class="lede">Find today's free offers, bonuses, and promotions—all in one place.</p>
-      <a href="casinos.html" class="btn btn-primary">Today's Drop</a>
-    </div>
-  </section>
-
-  <div class="ad-slot" aria-hidden="true">
-    <div class="ad-slot-inner">Ad slot — see README.md</div>
-  </div>
-
-  <section id="how-it-works">
-    <div class="container">
-      <div class="section-head">
-        <h2>How This Works</h2>
-      </div>
-
-      <div class="explainer">
-        <p>Many online sweepstakes casinos send their members promotional emails with links to claim free Sweeps Coins (SC). These SC can potentially be redeemed for real cash when you meet the casino's redemption requirements.</p>
-        <p>The problem? Finding all of those links takes time.</p>
-        <p>That's where FreeSCList comes in. We automatically search through the latest promotions from each casino, find the freebie links, and organize them all in one convenient place—so you don't have to dig through your inbox every day.</p>
-
-        <div class="callout">
-          <div class="callout-title">💰 Claim Them Every Day</div>
-          <p>Many sweepstakes casinos offer around 1 SC per day through daily promotions. When you claim freebies across multiple casinos, those small amounts can add up.</p>
-          <p>Some users can potentially collect <strong class="figure">$6–$7+</strong> worth of SC in a single day by claiming offers from multiple participating casinos.</p>
-          <p>We find them. You claim them. You keep the rewards.</p>
-        </div>
-
-        <div class="cta-row">
-          <a href="full-guide.html" class="btn btn-primary">Full Guide Breakdown</a>
-        </div>
+      <h1>Your Daily Drop of Free Sweeps Coins</h1>
+      <p class="lede">Discover verified casino daily rewards, bonus links, and promotional freebies all in one organized place. You can find <a href="full-guide.html">more info here</a>.</p>
+      <div class="hero-buttons">
+        <a href="casinos.html" class="btn btn-primary">Get Today's Dailys</a>
+        <a href="full-guide.html" class="btn btn-ghost">Read Full Guide</a>
       </div>
     </div>
   </section>
