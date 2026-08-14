@@ -760,8 +760,12 @@ function initDailies() {
 
   mount.innerHTML = '';
   
-  if (DAILIES_DATA.length > 0) {
-    DAILIES_DATA[0].date = getTodayEST();
+  var today = getTodayEST();
+  if (DAILIES_DATA.length === 0 || DAILIES_DATA[0].date !== today) {
+    DAILIES_DATA.unshift({
+      date: today,
+      entries: []
+    });
   }
 
   DAILIES_DATA.forEach(function (group) {
