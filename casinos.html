@@ -777,36 +777,45 @@ function initDailies() {
     var list = document.createElement('div');
     list.className = 'entry-list';
 
-    group.entries.forEach(function (entry) {
-      if (entry.note) {
-        var noteEl = document.createElement('span');
-        noteEl.className = 'targeted-label';
-        noteEl.textContent = entry.note;
-        list.appendChild(noteEl);
-      }
-
-      var line = document.createElement('p');
-      line.className = 'entry-line';
-
-      var nameEl = document.createElement('span');
-      nameEl.className = 'casino';
-      nameEl.textContent = entry.casino + ': ';
-      line.appendChild(nameEl);
-
-      entry.offers.forEach(function (offer, i) {
-        var a = document.createElement('a');
-        a.href = offer.href || '#';
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = offer.label;
-        line.appendChild(a);
-        if (i < entry.offers.length - 1) {
-          line.appendChild(document.createTextNode(', '));
+    if (!group.entries || group.entries.length === 0) {
+      var emptyMsg = document.createElement('p');
+      emptyMsg.className = 'entry-line';
+      emptyMsg.style.color = 'var(--ink-faint)';
+      emptyMsg.style.fontStyle = 'italic';
+      emptyMsg.textContent = 'New freebies coming soon...';
+      list.appendChild(emptyMsg);
+    } else {
+      group.entries.forEach(function (entry) {
+        if (entry.note) {
+          var noteEl = document.createElement('span');
+          noteEl.className = 'targeted-label';
+          noteEl.textContent = entry.note;
+          list.appendChild(noteEl);
         }
-      });
 
-      list.appendChild(line);
-    });
+        var line = document.createElement('p');
+        line.className = 'entry-line';
+
+        var nameEl = document.createElement('span');
+        nameEl.className = 'casino';
+        nameEl.textContent = entry.casino + ': ';
+        line.appendChild(nameEl);
+
+        entry.offers.forEach(function (offer, i) {
+          var a = document.createElement('a');
+          a.href = offer.href || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = offer.label;
+          line.appendChild(a);
+          if (i < entry.offers.length - 1) {
+            line.appendChild(document.createTextNode(', '));
+          }
+        });
+
+        list.appendChild(line);
+      });
+    }
 
     mount.appendChild(list);
   });
