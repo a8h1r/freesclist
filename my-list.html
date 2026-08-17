@@ -265,13 +265,19 @@ async function loadFeed() {
         }
     });
 
-    // Sort keys based on validDays order to ensure Today is first
-    const sortedDates = validDays.filter(dayStr => groups[dayStr]);
+    // Render valid days (always include today if user has selected casinos)
+    const todayStr = validDays[0];
+    const sortedDates = validDays.filter(dayStr => (groups[dayStr] && groups[dayStr].length > 0) || (dayStr === todayStr && watchedCasinoIds.length > 0));
 
     mount.innerHTML = '';
 
+    if (watchedCasinoIds.length === 0) {
+        mount.innerHTML = '<p style="color:var(--ink-faint); padding-top: 20px;">No casinos selected yet. Click "Filter Casinos" above to choose your favorite casinos!</p>';
+        return;
+    }
+
     if (sortedDates.length === 0) {
-        mount.innerHTML = '<p style="color:var(--ink-faint); padding-top: 20px;">No daily freebies available for your selected casinos yet. Click "Filter Casinos" above to choose your casinos or check back soon!</p>';
+        mount.innerHTML = '<p style="color:var(--ink-faint); padding-top: 20px;">No daily freebies available for your selected casinos yet. Check back soon!</p>';
         return;
     }
 
@@ -284,12 +290,22 @@ async function loadFeed() {
         const entryList = document.createElement('div');
         entryList.className = 'entry-list';
 
-        groups[date].forEach(item => {
-            const line = document.createElement('div');
-            line.className = 'entry-line';
-            line.innerHTML = `<span class="casino">${item.casino_name}: </span><a href="${item.claim_url}" target="_blank" rel="noopener noreferrer">${item.title || 'Free SC Offer'}</a>`;
-            entryList.appendChild(line);
-        });
+        const items = groups[date] || [];
+        if (items.length === 0) {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.className = 'entry-line';
+            emptyMsg.style.color = 'var(--ink-faint)';
+            emptyMsg.style.fontStyle = 'italic';
+            emptyMsg.textContent = 'New freebies coming soon for your selected casinos...';
+            entryList.appendChild(emptyMsg);
+        } else {
+            items.forEach(item => {
+                const line = document.createElement('div');
+                line.className = 'entry-line';
+                line.innerHTML = `<span class="casino">${item.casino_name}: </span><a href="${item.claim_url}" target="_blank" rel="noopener noreferrer">${item.title || 'Free SC Offer'}</a>`;
+                entryList.appendChild(line);
+            });
+        }
 
         mount.appendChild(entryList);
     });
