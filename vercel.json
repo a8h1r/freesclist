@@ -1,8 +1,6 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "handle": "filesystem" }
-  ]
+  "framework": null,
+  "outputDirectory": "."
 }
