@@ -686,6 +686,8 @@ section{ padding-block: 72px; }
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="src/lib/supabase.js"></script>
 <script>
 /* ==========================================================================
    FreeSCList — main.js
@@ -717,25 +719,7 @@ function initNavToggle() {
   });
 }
 
-/* -- dailies data ---------------------------------------------------------
-   Edit DAILIES_DATA to update the Dailys page. Each date group holds an
-   ordered list of entries. A plain casino entry renders as:
-     Casino: label Link, label Link
-   Set `note: 'Targeted'` on an entry to print a small label above it,
-   the way the original page calls out targeted-only offers.
-   -------------------------------------------------------------------- */
-var DAILIES_DATA = [
-{
-    date: 'August 12th',
-    entries: [
-      { casino: 'Crown Coins', offers: [ { label: '1 SC Bonus', href: 'https://playnow.crowncoinscasino.com/discord_1208' } ] },
-      { casino: 'PlayFame', offers: [ { label: 'Free Spins Giveaway', href: 'https://www.playfame.com/@neversplit10s/giveaway' } ] },
-      { casino: 'RealPrize', offers: [ { label: 'Free Spins', href: 'https://d10xl.com/realprizerewards/hAJHjGDaY2608' } ] },
-      { casino: 'LoneStar', offers: [ { label: 'Free Spins', href: 'http://d10xl.com/LoneStar/KtVSgbJ3O2608' } ] },
-      { casino: 'LuckyParty (Targeted)', offers: [ { label: '1 SC Bonus', href: 'https://my.manychat.com/r?act=3d3ee1f49c583a28df3b1efc4a908011&u=1012453392&p=674179385771571&h=8ff2798c7c' } ] }
-    ]
-  }
-];
+var DAILIES_DATA = [];
 
 async function initDailies() {
   var mount = document.getElementById('ledger-mount');
@@ -763,14 +747,22 @@ async function initDailies() {
     else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
     validDays.push(month + ' ' + day + suffix);
   }
-  
-  var todayStr = validDays[0];
 
-  // 2. Fetch live data
+  // 2. Fetch live data from Supabase
   var liveData = [];
   try {
-    var res = await fetch('/api/freebies');
-    if (res.ok) liveData = await res.json();
+    var sb = getSupabase();
+    if (sb) {
+      var res = await sb.from('freebies').select('*, casinos(name)').order('created_at', { ascending: false });
+      if (res.data) {
+        liveData = res.data.map(function(item) {
+          return {
+            ...item,
+            casino_name: item.casinos ? item.casinos.name : ''
+          };
+        });
+      }
+    }
   } catch (e) {
     console.error("Failed to fetch live freebies", e);
   }

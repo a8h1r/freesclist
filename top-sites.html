@@ -122,37 +122,39 @@ button{ cursor: pointer; font-family: inherit; }
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="src/lib/supabase.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        const sb = getSupabase();
+        
         // Fetch Date Badge
-        fetch('/api/settings/top-sites-date').then(r => r.json()).then(d => {
-            if (d.value) {
-                document.getElementById('dateBadgeMount').textContent = '📅 Last Updated: ' + d.value;
+        if (sb) {
+            const { data: setting } = await sb.from('site_settings').select('value').eq('key', 'top_sites_last_updated').maybeSingle();
+            if (setting && setting.value) {
+                document.getElementById('dateBadgeMount').textContent = '📅 Last Updated: ' + setting.value;
             }
-        });
 
-        const response = await fetch('/api/casinos');
-        const casinos = await response.json();
-        
-        const mount = document.getElementById('top-sites-mount');
-        const topCasinos = casinos.filter(c => c.show_on_top_sites === 1);
-        
-        if (topCasinos.length === 0) {
-            mount.innerHTML = '<p>No top sites currently available. Check back soon!</p>';
-            return;
-        }
-
-        topCasinos.forEach(c => {
-            const card = document.createElement('div');
-            card.className = 'casino-card';
+            const { data: casinos, error } = await sb.from('casinos').select('*').eq('show_on_top_sites', true).eq('is_active', true).order('created_at', { ascending: true });
             
-            card.innerHTML = `
-                <h3><a href="${c.referral_url || '#'}" target="_blank" rel="noopener noreferrer">${c.name}</a></h3>
-                <p>${c.description || ''}</p>
-            `;
-            mount.appendChild(card);
-        });
+            const mount = document.getElementById('top-sites-mount');
+            if (error || !casinos || casinos.length === 0) {
+                mount.innerHTML = '<p>No top sites currently available. Check back soon!</p>';
+                return;
+            }
+
+            casinos.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'casino-card';
+                
+                card.innerHTML = `
+                    <h3><a href="${c.referral_url || '#'}" target="_blank" rel="noopener noreferrer">${c.name}</a></h3>
+                    <p>${c.description || ''}</p>
+                `;
+                mount.appendChild(card);
+            });
+        }
     } catch (e) {
         console.error('Failed to load top sites:', e);
     }
