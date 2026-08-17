@@ -747,6 +747,8 @@ async function initDailies() {
     else if (num % 10 === 3 && num % 100 !== 13) suffix = 'rd';
     validDays.push(month + ' ' + day + suffix);
   }
+  
+  var todayStr = validDays[0];
 
   // 2. Fetch live data from Supabase
   var liveData = [];
